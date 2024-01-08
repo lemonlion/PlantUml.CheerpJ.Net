@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="plantuml-core.jar" />
+    <None Remove="plantuml-core.jar.js" />
+    <None Remove="Server\loader.js" />
+    <None Remove="Server\plantuml-core.jar" />
+    <None Remove="Server\plantuml-decoder.js" />
+    <None Remove="Server\plantumlRender.html" />
+    <None Remove="Server\plantumlRenderer.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jurassic" Version="3.2.7" />
+    <PackageReference Include="WireMock.Net" Version="1.5.46" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Server\plantuml-decoder.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Server\plantuml-core.jar">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Server\plantumlRender.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Server\plantumlRenderer.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Server\loader.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Server\plantuml-core.jar.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

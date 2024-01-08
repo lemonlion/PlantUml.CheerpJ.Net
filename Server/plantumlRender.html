@@ -9,25 +9,32 @@
 
 <body>
 
-		<div class="cell" id="outputDiv">
-		</div>
-		
+	<div class="cell" id="outputDiv"></div>
 
-<script>
+    <script>
+        "use strict"; /*global window */
+
         function done() {
             console.log(window.location.pathname);
-            text = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1); // document.getElementById('uml').value;
+            let href = window.location.href;
+            let text = href.substring(href.lastIndexOf('/') + 1); // document.getElementById('uml').value;
 
             text = plantumlEncoder.decode(text);
             text = "@startuml" + "\n" + text + "\n" + "@enduml";
             console.log(text);
 
+            let output = "";
             console.time("test_timer");
             for (let step = 0; step < 100; step++) {
                 cjCall("com.plantuml.api.cheerpj.v1.Png", "convertToBase64", "light", text).then((raw) => {
-                    console.log(raw);
-                    var outputDiv = document.getElementById("outputDiv");
-                    outputDiv.innerHTML = outputDiv.innerHTML + "\n\n\n" + raw;
+                    //console.log(raw);
+                    output = output + "\n\n\n" + raw;
+
+                    if (step == 99) {
+                        //console.log("outputRightHere:" + output);
+                        var outputDiv = document.getElementById("outputDiv");
+                        outputDiv.innerHTML = output;
+                    }
                 });
             }
             console.timeEnd("test_timer");
@@ -35,8 +42,6 @@
 
         var url = window.location.href;
         var x = url.indexOf("?");
-        if (x > 0)
-            document.getElementById('uml').value = "...in progress...";
             
         cheerpjInit({
             disableLoadTimeReporting: true,
@@ -54,7 +59,8 @@
                     done();
             });
         });
-	</script>
+	    
+    </script>
 
 </body>
 

@@ -5,19 +5,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.Text;
 
-Console.WriteLine("Hello, World!");
-//PlantUmlServer.Start();
-//var response = await new HttpClient().GetStringAsync("http://localhost:5017/plantuml");
+Console.WriteLine("Let's try some PlantUml!");
 
 CreateHostBuilder(args).Build().Run();
 await Task.Delay(TimeSpan.FromMinutes(5));
-Console.WriteLine("");
-//Console.WriteLine(response);
 
 static IHostBuilder CreateHostBuilder(string[] args) =>
     Host.CreateDefaultBuilder(args)
         .ConfigureWebHostDefaults(webBuilder =>
         {
+            webBuilder.ConfigureKestrel(options =>
+            {
+                options.Limits.MaxRequestBufferSize = 302768;
+                options.Limits.MaxRequestLineSize = 302768;
+            });
             webBuilder.UseUrls("http://localhost:5001");
             webBuilder.Configure(app => app.Run(async ctx =>
             {
@@ -55,7 +56,5 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
                     ctx.Response.Headers.ContentType = "text/html";
                     await ctx.Response.Body.WriteAsync(Encoding.UTF8.GetBytes(File.ReadAllText("Server/plantumlRender.html")));
                 }
-
-                //await ctx.Response.WriteAsync("Request Receivied");
             }));
         });

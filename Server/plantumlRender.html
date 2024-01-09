@@ -1,43 +1,45 @@
 ﻿
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>RAW</title>
+    <meta charset="utf-8">
+    <title>RAW</title>
     <script src="/plantuml-decoder.js"></script>
-	<script src="https://cjrtnc.leaningtech.com/2.3/loader.js"></script>
+    <script src="https://cjrtnc.leaningtech.com/2.3/loader.js"></script>
 </head>
 
 <body>
 
 	<div class="cell" id="outputDiv"></div>
 
-    <script>
+<script>
         "use strict"; /*global window */
 
         function done() {
             console.log(window.location.pathname);
             let href = window.location.href;
             let text = href.substring(href.lastIndexOf('/') + 1); // document.getElementById('uml').value;
+            let plantumls = text.split('$');
 
-            text = plantumlEncoder.decode(text);
-            text = "@startuml" + "\n" + text + "\n" + "@enduml";
-            console.log(text);
+            plantumls.forEach((element, index) => {
+                element = plantumlEncoder.decode(element);
+                plantumls[index] = "@startuml" + "\n" + element + "\n" + "@enduml";
+            });
 
             let output = "";
             console.time("test_timer");
-            for (let step = 0; step < 100; step++) {
-                cjCall("com.plantuml.api.cheerpj.v1.Png", "convertToBase64", "light", text).then((raw) => {
+            plantumls.forEach((plantuml, index) => {
+                cjCall("com.plantuml.api.cheerpj.v1.Png", "convertToBase64", "light", plantuml).then((raw) => {
                     //console.log(raw);
                     output = output + "\n\n\n" + raw;
 
-                    if (step == 99) {
+                    if (index == plantumls.length - 1) {
                         //console.log("outputRightHere:" + output);
                         var outputDiv = document.getElementById("outputDiv");
                         outputDiv.innerHTML = output;
+                        console.timeEnd("test_timer");
                     }
                 });
-            }
-            console.timeEnd("test_timer");
+            });
         }
 
         var url = window.location.href;
